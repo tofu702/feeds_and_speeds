@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Feeds &amp; Speeds Calculator</title>
+    <script type="text/javascript">
+      function endMillINChange() {
+        var diameter_in = parseFloat(document.getElementById("diameter_in").value);
+        var diameter_mm = diameter_in * 25.4;
+        document.getElementById("diameter_mm").value = diameter_mm;
+      }
+
+      function endMillMMChange() {
+        var diameter_mm = parseFloat(document.getElementById("diameter_mm").value);
+        var diameter_in = diameter_mm / 25.4;
+        document.getElementById("diameter_in").value = diameter_in;
+      }
+
+      function rpmChange() { 
+        var rpm = parseFloat(document.getElementById("rpm").value);
+
+        var diameter_in = parseFloat(document.getElementById("diameter_in").value);
+        var fpm = rpm * (diameter_in/12.0) * Math.PI;
+        document.getElementById("s_ft_per_min").value = fpm;
+
+        var diameter_mm = parseFloat(document.getElementById("diameter_mm").value);
+        var rps = rpm/60.0;
+        var mm_per_s = rps * diameter_mm * Math.PI;
+        document.getElementById("s_mm_per_sec").value = mm_per_s;
+      }
+
+      function feedRateINChange() {
+        var in_per_min = parseFloat(document.getElementById("f_in_per_min").value);
+        var mm_per_min = in_per_min * 25.4;
+        var mm_per_sec = mm_per_min / 60.0;
+
+        document.getElementById("f_mm_per_s").value = mm_per_sec;
+        chipLoadCompute();
+      }
+
+      function feedRateMMChange() {
+        var mm_per_sec = parseFloat(document.getElementById("f_mm_per_s").value);
+        var mm_per_min = mm_per_sec * 60.0;
+        var in_per_min = mm_per_min / 25.4;
+
+        document.getElementById("f_in_per_min").value = in_per_min;
+        chipLoadCompute();
+      }
+
+      function chipLoadCompute() {
+        var num_flutes = parseFloat(document.getElementById("num_flutes").value);
+        var rpm = parseFloat(document.getElementById("rpm").value);
+        var rps = rpm/60.0;
+        var flutes_per_sec = rps * num_flutes;
+
+        var f_mm_per_sec = parseFloat(document.getElementById("f_mm_per_s").value);
+        var mm_per_flute = f_mm_per_sec / flutes_per_sec;
+        document.getElementById("cl_mm_per_flute").value = mm_per_flute;
+
+        var in_per_flute = mm_per_flute / 25.4;
+        var thou_per_flute = in_per_flute * 1000;
+        document.getElementById("cl_thou_per_flute").value = thou_per_flute;
+      }
+    </script>
+  </head>
+  <body>
+  <h1 align=center>Feeds &amp; Speeds Calculator</h1>
+  <i>Goal:</i> Provide feeds and speeds for common materials and endmills and imperial to metric conversion<BR/>
+  <i>Also See:</i> <a href="https://docs.carbide3d.com/support/supportfiles/Nomad883_feeds_125.pdf" target="_blank">Carbide3D Feeds &amp; Speeds</a><BR/>
+  <BR/>
+  <B>End mill</B>
+  <div>
+    End mill name: <input type="text" id="endmill_name" value="1/8"/><BR/>
+    End mill diameter inches: <input type=text id="diameter_in" value="0.125" onchange="javascript:endMillINChange()"/><BR/>
+    End mill diameter  mm: <input type=text id="diameter_mm" onchange="javascript:endMillMMChange()"/><BR/>
+    Flutes: <input type="text" id="num_flutes" value="2"/><BR/>
+  </div><BR/>
+  <B>Speeds</B>
+  <div>
+    RPM: <input type="text" id="rpm" value="9200" onchange="javascript:rpmChange()"/><BR/>
+    Speed ft/min: <input type="text" id="s_ft_per_min" readonly="true"/><BR/>
+    Speed mm/s: <input type="text" id="s_mm_per_sec" readonly="true"/><BR/>
+  </div><BR/>
+  <B>Feeds</B>
+  <div>
+    Feed Rate in/min: <input type="text" id="f_in_per_min" value="8" onchange="javascript:feedRateINChange()"/><BR/>
+    Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/><BR/>
+    Chip Load thou/flute: <input type="text" id="cl_thou_per_flute" readonly=true/><BR/>
+    Chip Load mm/flute: <input type="text" id="cl_mm_per_flute" readonly=true/><BR/>
+  </div>
+  </body>
+  <script type="text/javascript">
+    endMillINChange();
+    rpmChange();
+    feedRateINChange();
+  </script>
+</html>
