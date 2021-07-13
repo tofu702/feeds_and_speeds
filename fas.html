@@ -3,7 +3,18 @@
     <title>Feeds &amp; Speeds Calculator</title>
     <script type="text/javascript">
       function endMillINChange() {
-        var diameter_in = parseFloat(document.getElementById("diameter_in").value);
+        var diameter_in_str = document.getElementById("diameter_in").value;
+        var diameter_in = null;
+        if (diameter_in_str.indexOf("/") == -1) {
+          diameter_in = parseFloat(diameter_in_str);
+        } else {
+          // Support ratios (ex: 1/32)
+          var parts = diameter_in_str.split("/");
+          var numerator = parts[0];
+          var denominator = parts[1];
+          diameter_in = parseFloat(numerator) / parseFloat(denominator);
+          document.getElementById("diameter_in").value = diameter_in
+        }
         var diameter_mm = diameter_in * 25.4;
         document.getElementById("diameter_mm").value = diameter_mm;
         rpmChange();
@@ -69,13 +80,14 @@
   <body>
   <h1 align=center>Feeds &amp; Speeds Calculator</h1>
   <i>Goal:</i> Provide feeds and speeds for common materials and endmills and imperial to metric conversion<BR/>
-  <i>Also See:</i> [<a href="https://docs.carbide3d.com/support/supportfiles/Nomad883_feeds_125.pdf" target="_blank">Carbide3D Feeds &amp; Speeds</a>] 
+  <i>Also See:</i> [<a href="https://docs.carbide3d.com/support/supportfiles/Nomad883_feeds_125.pdf" target="_blank">Carbide3D Feeds &amp; Speeds</a>]
                    [<a href="https://support.bantamtools.com/hc/en-us/articles/115001668413-Aluminum" target="_blank">Othermill Feeds &amp; Speeds</a>]<BR/>
   <BR/>
   <B>End mill</B>
   <div>
     End mill name: <input type="text" id="endmill_name" value="1/8"/><BR/>
-    End mill diameter inches: <input type=text id="diameter_in" value="0.125" onchange="javascript:endMillINChange()"/><BR/>
+    End mill diameter inches: <input type=text id="diameter_in" value="0.125" onchange="javascript:endMillINChange()"/>
+      (<i>Note:</i> Ratios such as "1/32" are supported)<BR/>
     End mill diameter  mm: <input type=text id="diameter_mm" onchange="javascript:endMillMMChange()"/><BR/>
     Flutes: <input type="text" id="num_flutes" value="2"/><BR/>
   </div><BR/>
