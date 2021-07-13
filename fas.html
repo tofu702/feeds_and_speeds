@@ -6,12 +6,15 @@
         var diameter_in = parseFloat(document.getElementById("diameter_in").value);
         var diameter_mm = diameter_in * 25.4;
         document.getElementById("diameter_mm").value = diameter_mm;
+        rpmChange();
       }
 
       function endMillMMChange() {
         var diameter_mm = parseFloat(document.getElementById("diameter_mm").value);
         var diameter_in = diameter_mm / 25.4;
         document.getElementById("diameter_in").value = diameter_in;
+
+        rpmChange();
       }
 
       function rpmChange() { 
@@ -25,6 +28,8 @@
         var rps = rpm/60.0;
         var mm_per_s = rps * diameter_mm * Math.PI;
         document.getElementById("s_mm_per_sec").value = mm_per_s;
+
+        chipLoadCompute();
       }
 
       function feedRateINChange() {
