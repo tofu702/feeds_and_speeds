@@ -28,6 +28,10 @@
         rpmChange();
       }
 
+      function flutesChange() {
+        chipLoadCompute()
+      }
+
       function rpmChange() {
         var rpm = parseFloat(document.getElementById("rpm").value);
 
@@ -89,7 +93,7 @@
     End mill diameter inches: <input type=text id="diameter_in" value="0.125" onchange="javascript:endMillINChange()"/>
       (<i>Note:</i> Ratios such as "1/32" are supported)<BR/>
     End mill diameter  mm: <input type=text id="diameter_mm" onchange="javascript:endMillMMChange()"/><BR/>
-    Flutes: <input type="text" id="num_flutes" value="2"/><BR/>
+    Flutes: <input type="text" id="num_flutes" value="2" onchange="javascript:flutesChange()"/><BR/>
   </div><BR/>
   <B>Speeds</B>
   <div>
