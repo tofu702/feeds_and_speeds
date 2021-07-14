@@ -78,6 +78,10 @@
         var in_per_flute = mm_per_flute / 25.4;
         var thou_per_flute = in_per_flute * 1000;
         document.getElementById("cl_thou_per_flute").value = thou_per_flute;
+
+        var cutter_diameter = parseFloat(document.getElementById("diameter_mm").value);
+        var percent_of_cutter_diameter = mm_per_flute / cutter_diameter * 100.0;
+        document.getElementById("cl_percent_cutter_diameter").value = percent_of_cutter_diameter;
       }
     </script>
   </head>
@@ -109,6 +113,7 @@
     Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/><BR/>
     Chip Load thou/flute: <input type="text" id="cl_thou_per_flute" readonly=true/><BR/>
     Chip Load mm/flute: <input type="text" id="cl_mm_per_flute" readonly=true/><BR/>
+    Chip % of cutter diameter: <input type="text" id="cl_percent_cutter_diameter" readonly="true">%</BR>
   </div>
   </body>
   <script type="text/javascript">
