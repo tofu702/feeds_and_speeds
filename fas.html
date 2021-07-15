@@ -17,7 +17,7 @@
         }
         var diameter_mm = diameter_in * 25.4;
         document.getElementById("diameter_mm").value = diameter_mm;
-        rpmChange();
+        recomputeDerived();
       }
 
       function endMillMMChange() {
@@ -25,14 +25,18 @@
         var diameter_in = diameter_mm / 25.4;
         document.getElementById("diameter_in").value = diameter_in;
 
-        rpmChange();
+        recomputeDerived();
       }
 
       function flutesChange() {
-        chipLoadCompute()
+        recomputeDerived();
       }
 
       function rpmChange() {
+        recomputeDerived();
+      }
+
+      function speedsCompute() {
         var rpm = parseFloat(document.getElementById("rpm").value);
 
         var diameter_in = parseFloat(document.getElementById("diameter_in").value);
@@ -43,8 +47,6 @@
         var rps = rpm/60.0;
         var mm_per_s = rps * diameter_mm * Math.PI;
         document.getElementById("s_mm_per_sec").value = mm_per_s;
-
-        chipLoadCompute();
       }
 
       function feedRateINChange() {
@@ -53,7 +55,7 @@
         var mm_per_sec = mm_per_min / 60.0;
 
         document.getElementById("f_mm_per_s").value = mm_per_sec;
-        chipLoadCompute();
+        recomputeDerived();
       }
 
       function feedRateMMChange() {
@@ -62,7 +64,7 @@
         var in_per_min = mm_per_min / 25.4;
 
         document.getElementById("f_in_per_min").value = in_per_min;
-        chipLoadCompute();
+        recomputeDerived();
       }
 
       function chipLoadCompute() {
@@ -82,6 +84,36 @@
         var cutter_diameter = parseFloat(document.getElementById("diameter_mm").value);
         var percent_of_cutter_diameter = mm_per_flute / cutter_diameter * 100.0;
         document.getElementById("cl_percent_cutter_diameter").value = percent_of_cutter_diameter;
+      }
+
+      function DOCInChange() {
+        var doc_in = parseFloat(document.getElementById("doc_in").value);
+        var doc_mm = doc_in * 25.4;
+        document.getElementById("doc_mm").value = doc_mm;
+
+        recomputeDerived();
+      }
+
+      function DOCMMChange() {
+        var doc_mm = parseFloat(document.getElementById("doc_mm").value);
+        var doc_in = doc_mm / 25.4;
+        document.getElementById("doc_in").value = doc_in;
+
+        DOCPercentageCompute();
+      }
+
+      function DOCPercentageCompute() {
+        var cutter_diameter = parseFloat(document.getElementById("diameter_mm").value);
+        var doc_mm = parseFloat(document.getElementById("doc_mm").value);
+        var percent_of_cutter_diameter = doc_mm / cutter_diameter * 100.0;
+
+        document.getElementById("doc_percent_cutter_diameter").value = percent_of_cutter_diameter;
+      }
+
+      function recomputeDerived() {
+        speedsCompute();
+        chipLoadCompute();
+        DOCPercentageCompute();
       }
     </script>
   </head>
@@ -113,12 +145,19 @@
     Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/><BR/>
     Chip Load thou/flute: <input type="text" id="cl_thou_per_flute" readonly=true/><BR/>
     Chip Load mm/flute: <input type="text" id="cl_mm_per_flute" readonly=true/><BR/>
-    Chip % of cutter diameter: <input type="text" id="cl_percent_cutter_diameter" readonly="true">%</BR>
+    Chip % of cutter diameter: <input type="text" id="cl_percent_cutter_diameter" readonly="true">%<BR/>
+  </div><BR/>
+  <B>Depth of Cut</B>
+  <div>
+    Depth of Cut inches: <input type="text" id="doc_in" value="0.010" onchange="javascript:DOCInChange()"/><BR/>
+    Depth of Cut mm: <input type="text" id="doc_mm" onchange="javascript:DOCMMChange()"/><BR/>
+    Depth of Cut % cutter diameter: <input type="text" id="doc_percent_cutter_diameter" readonly="true">%<BR/>
   </div>
   </body>
   <script type="text/javascript">
     endMillINChange();
-    rpmChange();
     feedRateINChange();
+    DOCInChange();
+    recomputeDerived();
   </script>
 </html>
