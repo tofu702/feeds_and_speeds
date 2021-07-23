@@ -72,6 +72,23 @@
         document.getElementById("f_mm_per_min").value = mm_per_sec * 60.0
       }
 
+      function stepoverPercentChange() {
+        recomputeDerived();
+      }
+
+      function stepoverDimensionCompute() {
+        var stepover_percent = parseFloat(document.getElementById("stepover_percent").value);
+        var cutter_diameter_mm = parseFloat(document.getElementById("diameter_mm").value);
+
+        var stepover_decimal = stepover_percent / 100.0;
+
+        var stepover_mm = stepover_decimal * cutter_diameter_mm;
+        document.getElementById("stepover_mm").value = stepover_mm;
+
+        var stepover_in = stepover_mm / 25.4;
+        document.getElementById("stepover_in").value = stepover_in;
+      }
+
       function chipLoadCompute() {
         var num_flutes = parseFloat(document.getElementById("num_flutes").value);
         var rpm = parseFloat(document.getElementById("rpm").value);
@@ -104,7 +121,7 @@
         var doc_in = doc_mm / 25.4;
         document.getElementById("doc_in").value = doc_in;
 
-        DOCPercentageCompute();
+        recomputeDerived();
       }
 
       function DOCPercentageCompute() {
@@ -115,11 +132,27 @@
         document.getElementById("doc_percent_cutter_diameter").value = percent_of_cutter_diameter;
       }
 
+      function ratesCompute() {
+        var cutter_diameter_mm = parseFloat(document.getElementById("diameter_mm").value);
+        var doc_mm = parseFloat(document.getElementById("doc_mm").value);
+        var f_mm_per_sec = parseFloat(document.getElementById("f_mm_per_s").value);
+        var stepover_percent = parseFloat(document.getElementById("stepover_percent").value);
+
+        var surface_mm2_per_sec = f_mm_per_sec * cutter_diameter_mm * stepover_percent/100.0;
+        var surface_mm2_per_min = surface_mm2_per_sec*60.0;
+        document.getElementById("surface_area_mm2_per_min").value = surface_mm2_per_min;
+
+        var volume_mm3_per_min = surface_mm2_per_min * doc_mm;
+        document.getElementById("vol_mm3_per_min").value = volume_mm3_per_min;
+      }
+
       function recomputeDerived() {
         speedsCompute();
         feedRateMMPerMinCompute();
+        stepoverDimensionCompute();
         chipLoadCompute();
         DOCPercentageCompute();
+        ratesCompute();
       }
     </script>
   </head>
@@ -152,6 +185,9 @@
     Feed Rate in/min: <input type="text" id="f_in_per_min" value="8" onchange="javascript:feedRateINChange()"/><BR/>
     Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/>
               mm/min: <input type="text" id="f_mm_per_min" readonly=true/><BR/>
+    Stepover %: <input type="text" id="stepover_percent" value="50" onchange="javascript:stepoverPercentChange()"/>
+    mm: <input type="text" id="stepover_mm" readonly=true/>
+    in: <input type="text" id="stepover_in" readonly=true/><BR/>
     Chip Load thou/flute: <input type="text" id="cl_thou_per_flute" readonly=true/><BR/>
     Chip Load mm/flute: <input type="text" id="cl_mm_per_flute" readonly=true/><BR/>
     Chip % of cutter diameter: <input type="text" id="cl_percent_cutter_diameter" readonly="true">%<BR/>
@@ -161,6 +197,11 @@
     Depth of Cut inches: <input type="text" id="doc_in" value="0.010" onchange="javascript:DOCInChange()"/><BR/>
     Depth of Cut mm: <input type="text" id="doc_mm" onchange="javascript:DOCMMChange()"/><BR/>
     Depth of Cut % cutter diameter: <input type="text" id="doc_percent_cutter_diameter" readonly="true">%<BR/>
+  </div><BR/>
+  <B>Rates</B>
+  <div>
+    Surface Area (mm^2/min): <input type="text" id="surface_area_mm2_per_min" readonly="true"/><BR/>
+    Volume (mm^3/min): <input type="text" id="vol_mm3_per_min" readonly="true"/>
   </div>
   </body>
   <script type="text/javascript">
