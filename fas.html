@@ -67,6 +67,11 @@
         recomputeDerived();
       }
 
+      function feedRateMMPerMinCompute() {
+        var mm_per_sec = parseFloat(document.getElementById("f_mm_per_s").value);
+        document.getElementById("f_mm_per_min").value = mm_per_sec * 60.0
+      }
+
       function chipLoadCompute() {
         var num_flutes = parseFloat(document.getElementById("num_flutes").value);
         var rpm = parseFloat(document.getElementById("rpm").value);
@@ -112,6 +117,7 @@
 
       function recomputeDerived() {
         speedsCompute();
+        feedRateMMPerMinCompute();
         chipLoadCompute();
         DOCPercentageCompute();
       }
@@ -144,7 +150,8 @@
   <B>Feeds</B>
   <div>
     Feed Rate in/min: <input type="text" id="f_in_per_min" value="8" onchange="javascript:feedRateINChange()"/><BR/>
-    Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/><BR/>
+    Feed Rate mm/s: <input type="text" id="f_mm_per_s" onchange="javascript:feedRateMMChange()"/>
+              mm/min: <input type="text" id="f_mm_per_min" readonly=true/><BR/>
     Chip Load thou/flute: <input type="text" id="cl_thou_per_flute" readonly=true/><BR/>
     Chip Load mm/flute: <input type="text" id="cl_mm_per_flute" readonly=true/><BR/>
     Chip % of cutter diameter: <input type="text" id="cl_percent_cutter_diameter" readonly="true">%<BR/>
